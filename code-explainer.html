@@ -1,0 +1,291 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-selector/core-selector.html">
+<link rel="import" href="../core-media-query/core-media-query.html">
+<link rel="import" href="../highlightjs-element/highlightjs-element.html">
+
+<!-- Private element used by `code-explainer`. -->
+<polymer-element name="code-explainer-section" attributes="sec highlight">
+
+<!--
+    FIXME(kschaaf): Note, adding line breaks before/after any of the tags
+    inside the template breaks the inline-ness of the spans this element
+    wraps, which is why it isn't properly spacey.
+ -->
+ <template><style>
+
+  .content {
+    border-bottom: 1px rgba(0,128,0,0.4) dashed;
+  }
+
+  .content.highlight {
+    background: yellow;
+  }
+
+</style><span class="content {{ {highlight:highlight} | tokenList }}"><content></content></span></template>
+
+<script>
+  
+  Polymer({
+
+    sec: 0,
+    
+    eventDelegates: {
+      mouseover: 'over',
+      mouseout: 'out',
+      tap: 'tap'
+    },
+    
+    over: function() {
+      this.fire('select', {code: true, sec: this.sec});
+    },
+    
+    out: function() {
+      this.fire('select');
+    },
+
+    tap: function() {
+      this.fire('select', {code: true, sec: this.sec, tapped: true})
+    }
+  });
+
+</script>
+</polymer-element>
+
+<!--
+The `code-explainer-info` should be included as children of a `code-explainer`
+element to provide annotations to tagged sections of the code.  
+See <a href="#">`code-explainer`</a> for more information.
+ 
+@element code-explainer-info
+@status beta
+@homepage github.io
+-->
+<polymer-element name="code-explainer-info" attributes="label active sec">
+<template>
+  <style>  
+    :host {
+      color: white;
+      padding: 12px 16px 8px 16px;
+    }
+
+    :host([active]) {
+      background-color: #d61a7f;
+    }
+
+    .label {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    ::content code {
+      color: #d61a7f;
+    }
+
+    :host([active]) ::content code {
+      color: #1f2036;
+    }
+  </style>
+  <div class="label">{{label}}.</div>
+  <content></content>
+</template>
+
+<script>
+
+  Polymer({
+
+    /**
+     * Section name that maps to one or more `[start-xyz]`/`[end-xyz]` tags
+     * in the code snippit (where `xyz` maps to this `sec` property).  Must
+     * be a letter, number, or underscore.
+     * @attribute sec
+     * @type String
+     */
+    sec: null,
+
+    /**
+     * Freeform text describing this section in the explainer.  Gets special
+     * styling treatment.
+     * @attribute label
+     * @type String
+     */
+    label: "",
+
+    active: false,
+
+    eventDelegates: {
+      mouseover: 'over',
+      mouseout: 'out',
+      tap: 'tap'
+    },
+
+    over: function() {
+      this.fire('select', {sec: this.sec});
+    },
+
+    out: function() {
+      this.fire('select');
+    },
+
+    tap: function() {
+      this.fire('select', {sec: this.sec, tapped: true})
+    }
+
+  });
+
+</script>
+</polymer-element>
+
+<!--
+The `code-explainer` element is a high-level element for displaying a snippit of 
+syntax-highlighted code alongside a sidebar of supplied `code-explainer-info` 
+elements that describe sections of the code.
+
+Code is supplied via a child `<template>` tag containing the code to be syntax 
+highlighted (HTML markup need not be escaped).  Explanatory text should be supplied
+using child `<code-explainer-info>` elements.  Sections of the code can be tagged 
+using special `[start-xyz]...[end-xyz]` tags, where `xyz` is a string mapping
+code sections to a supplied `code-explainer-info` element whose `sec` attribute
+matches.  Both the tagged code sections and explainer text are hoverable to 
+highlight and draw attention to the section of code being explained.  More than one
+code sections tagged with `[start-xyz]...[enx-xyz]` can be supplied for a given
+section.
+
+Example:
+
+    <code-explainer label="How bindings work">
+      <template>
+        <template>
+          <div class="foo">[start-mustache]{{userName}}[end-mustache]</div>
+        </template>
+        <script>
+          Polymer({
+            [start-var]userName: "John"[end-var]
+          });
+        </script>
+      </template>
+      <code-explainer-info sec="var" label="Define a variable">
+        Variables defined in the scope of a Polymer object are
+        available for binding.
+      </code-explainer-info>
+      <code-explainer-info sec="mustache" label="Insert a binding">
+        Bindings can be inserted into the view using <code>{{...}}</code> 
+        mustache-style syntax.
+      </code-explainer-info>
+    </code-explainer>
+ 
+@element code-explainer
+@status beta
+@homepage github.io
+-->
+
+<polymer-element name="code-explainer" attributes="label">
+<template>
+  <style>
+
+    .xml .javascript {
+      opacity: 1 !important;
+    }
+
+    pre#code {
+      margin: 0;
+      background-color: #f8f8f8;
+      overflow-x: auto;
+    }
+
+    h2 {
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 48px;
+      margin: 0;
+      background-color: #f8f8f8;
+      padding: 16px 16px 0 16px;
+    }
+
+    .sidebar {
+      width: 100%;
+      background-color: #1f2036;
+      overflow-x: auto;
+    }
+
+    .wide .sidebar {
+      width: 400px;
+    }
+
+  </style>
+
+  <core-media-query query="min-width: 640px" queryMatches="{{wide}}"></core-media-query>
+  <link href="../highlightjs/styles/default.css" rel="stylesheet" />
+  <link href="../highlightjs/styles/github.css" rel="stylesheet" />
+  <h2>{{label}}</h2>
+  <div layout horizontal?="{{wide}}" vertical?="{{!wide}}" class="{{ {wide:wide} | tokenList }}">
+    <pre id="code" flex on-select="{{select}}"></pre>
+    <core-selector selected="{{selected}}" valueattr="sec" class="sidebar" layout vertical>
+      <content></content>
+    </core-selector>
+  </div>
+
+</template>
+
+<script>
+
+  Polymer({
+
+    /**
+     * Heading label text that descripes this code explainer.  Gets heading
+     * styling treatment.
+     * @attribute label
+     * @type String
+     */
+    label: null,
+
+    eventDelegates: {
+      select: 'select'
+    },
+
+    selected: null,
+
+    ready: function() {
+      var code = this.querySelector('template').innerHTML;
+      var indent = code.match("\n([ \t]+)")[0];
+      code = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      code = code.replace(/\[start-(\w+)\]/g, "<code-explainer-section sec=\"$1\">");
+      code = code.replace(/\[end-(\w+)\]/g, "</code-explainer-section>");
+      if (indent) {
+        code = code.replace(new RegExp(indent, 'g'), '\n');
+      }
+      this.$.code.innerHTML = code;
+      hljs.highlightBlock(this.$.code);
+    },
+
+    selectedChanged: function() {
+      var secs = this.shadowRoot.querySelectorAll('code-explainer-section');
+      for (var i=0; i<secs.length; i++) {
+        var sec = secs[i];
+        var sel = (sec.sec == this.selected);
+        sec.highlight = sel;
+      }
+    },
+
+    select: function(e) {
+      if (this.hoverDelay) {
+        return;
+      }
+      this.selected = e.detail.sec;
+      if (e.detail.tapped) {
+        var type = (e.detail.code) ? 'code-explainer-info' : 'code-explainer-section';
+        var root = (e.detail.code) ? this : this.shadowRoot;
+        var sec = root.querySelector(type + '[sec="' + this.selected + '"]');
+        if (sec) {
+          this.hoverDelay = true;
+          sec.scrollIntoViewIfNeeded(true);
+          setTimeout(function() {
+            this.hoverDelay = false;
+          }.bind(this), 100);
+        }
+      }
+    }
+
+  });
+
+</script>
+</polymer-element>

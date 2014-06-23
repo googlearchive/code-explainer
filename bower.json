@@ -1,0 +1,11 @@
+{
+  "name": "code-explainer",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+	"core-selector": "Polymer/core-selector",
+	"core-media-query": "Polymer/core-media-query",
+	"highlightjs-element": "Polymer/highlightjs-element"
+  }
+}
+
