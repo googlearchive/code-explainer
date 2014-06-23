@@ -141,12 +141,12 @@ The `code-explainer` element is a high-level element for displaying a snippit of
 syntax-highlighted code alongside a sidebar of supplied `code-explainer-info` 
 elements that describe sections of the code.
 
-Code is supplied via a child `<template>` tag containing the code to be syntax 
-highlighted (HTML markup need not be escaped).  Explanatory text should be supplied
-using child `<code-explainer-info>` elements.  Sections of the code can be tagged 
-using special `[start-xyz]...[end-xyz]` tags, where `xyz` is a string mapping
-code sections to a supplied `code-explainer-info` element whose `sec` attribute
-matches.  Both the tagged code sections and explainer text are hoverable to 
+Code is supplied via a child `<template>` or `<script type="template"> tag containing
+the code to be syntax  highlighted (HTML markup need not be escaped).  Explanatory
+text should be supplied using child `<code-explainer-info>` elements.  Sections of 
+the code can be tagged using special `[start-xyz]...[end-xyz]` tags, where `xyz` is a 
+string mapping code sections to a supplied `code-explainer-info` element whose `sec` 
+attribute matches.  Both the tagged code sections and explainer text are hoverable to 
 highlight and draw attention to the section of code being explained.  More than one
 code sections tagged with `[start-xyz]...[enx-xyz]` can be supplied for a given
 section.
@@ -155,9 +155,9 @@ Example:
 
     <code-explainer label="How bindings work">
       <template>
-        <template>
+        <script type="text/template">
           <div class="foo">[start-mustache]{{userName}}[end-mustache]</div>
-        </template>
+        </script>
         <script>
           Polymer({
             [start-var]userName: "John"[end-var]

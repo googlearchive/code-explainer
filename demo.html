@@ -23,7 +23,7 @@ license that can be found in the LICENSE file.
 <body unresolved touch-action="auto">
 
   <code-explainer label="How bindings work">
-    <template>
+    <script type="text/template">
       <template>
         <div class="foo">[start-mustache]{{userName}}[end-mustache]</div>
       </template>
@@ -31,8 +31,8 @@ license that can be found in the LICENSE file.
         Polymer({
           [start-var]userName: "John"[end-var]
         });
-      </script>
-    </template>
+      &lt;/script>
+    </script>
     <code-explainer-info sec="var" label="Define a variable">
       Variables defined in the scope of a Polymer object are
       available for binding.
@@ -46,13 +46,13 @@ license that can be found in the LICENSE file.
   <br>
 
   <code-explainer label="Using Polymer Elements">
-    <template>
+    <script type="text/template">
       // Import element
       [start-create]<link rel="import" href="components/google-map/google-map.html">[end-use]
 
       // Use element
       [start-use]<google-map lat="37.790144" long="-122.390267"></google-map>[end-create]
-    </template>
+    </script>
     <code-explainer-info sec="create" label="1. Import a component you'd like to use">
       Find a component, grab the code, and simply import the component into your page using
       the new <code>&lt;link rel="import"&gt;</code> tag.
@@ -65,7 +65,7 @@ license that can be found in the LICENSE file.
   <br>
 
   <code-explainer label="Creating Polymer Elements">
-    <template>
+    <script type="text/template">
       // Define element
       [start-def]<polymer-element name="my-counter">[end-def]
         [start-templ]<template>[end-templ]
@@ -87,12 +87,12 @@ license that can be found in the LICENSE file.
               this.counter++;
             }
           });
-        </script>
+        &lt;/script>
       [start-def]</polymer-element>[end-def]
 
       // Use element
       <my-counter [start-publish]counter="10">[end-publish]</my-counter>
-    </template>
+    </script>
     <code-explainer-info sec="def" label="Declarative custom element definition">
       Polymer allows you to declaratively build custom elements using <code>&lt;polymer-element&gt;</code>
     </code-explainer-info>
