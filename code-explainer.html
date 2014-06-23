@@ -247,8 +247,14 @@ Example:
     selected: null,
 
     ready: function() {
-      var code = this.querySelector('template').innerHTML;
-      var indent = code.match("\n([ \t]+)")[0];
+      var tmpl = this.querySelector('template');
+      var code = tmpl && tmpl.innerHTML;
+      if (!code) {
+        console.warn('No code found in template: ', this);
+        return;
+      }
+      var indents = code.match("\n([ \t]+)");
+      var indent = indents && indents[0];
       code = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       code = code.replace(/\[start-(\w+)\]/g, "<code-explainer-section sec=\"$1\">");
       code = code.replace(/\[end-(\w+)\]/g, "</code-explainer-section>");
