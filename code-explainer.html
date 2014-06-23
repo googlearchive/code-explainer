@@ -218,7 +218,7 @@ Example:
   <core-media-query query="min-width: 640px" queryMatches="{{wide}}"></core-media-query>
   <link href="../highlightjs/styles/default.css" rel="stylesheet" />
   <link href="../highlightjs/styles/github.css" rel="stylesheet" />
-  <h2>{{label}}</h2>
+  <h2 hidden?="{{!label}}">{{label}}</h2>
   <div layout horizontal?="{{wide}}" vertical?="{{!wide}}" class="{{ {wide:wide} | tokenList }}">
     <pre id="code" flex on-select="{{select}}"></pre>
     <core-selector selected="{{selected}}" valueattr="sec" class="sidebar" layout vertical>
@@ -246,8 +246,8 @@ Example:
 
     selected: null,
 
-    ready: function() {
-      var tmpl = this.querySelector('template');
+    attached: function() {
+      var tmpl = this.querySelector('template') || this.querySelector('script[type="text/template"]');
       var code = tmpl && tmpl.innerHTML;
       if (!code) {
         console.warn('No code found in template: ', this);
@@ -255,7 +255,7 @@ Example:
       }
       var indents = code.match("\n([ \t]+)");
       var indent = indents && indents[0];
-      code = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      code = code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
       code = code.replace(/\[start-(\w+)\]/g, "<code-explainer-section sec=\"$1\">");
       code = code.replace(/\[end-(\w+)\]/g, "</code-explainer-section>");
       if (indent) {
