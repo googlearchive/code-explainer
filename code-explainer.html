@@ -18,7 +18,7 @@
   }
 
   .content.highlight {
-    background: yellow;
+    background-color: rgba(100,123,253,0.3);
   }
 
 </style><span class="content {{ {highlight:highlight} | tokenList }}"><content></content></span></template>
@@ -60,17 +60,31 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
 @status beta
 @homepage github.io
 -->
-<polymer-element name="code-explainer-info" attributes="label active sec">
+<polymer-element name="code-explainer-info" attributes="label bullet active sec">
 <template>
   <style>
 
     :host([active]) {
-      background-color: #d61a7f;
+      background-color: #657cfe;
     }
 
+    .bullet {
+      font-weight: bold;
+      background: #1f2035;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      border-radius: 12px; 
+      margin-right: 8px;     
+    }
     .label {
-      font-weight: 600;
+      font-weight: bold;
       margin-bottom: 4px;
+    }
+
+    .content {
+      margin-top: 4px;
+      line-height: 20px;
     }
 
     polyfill-next-selector { content: ':host code'; }
@@ -78,8 +92,11 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
       color: white;
     }
   </style>
-  <div class="label">{{label}}.</div>
-  <content></content>
+  <div layout horizontal>
+    <div hidden?="{{!bullet}}" class="bullet">{{bullet}}</div>
+    <div class="label">{{label}}.</div>
+  </div>
+  <div class="content"><content></content></div>
 </template>
 
 <script>
@@ -183,7 +200,12 @@ Example:
       margin: 0;
       background-color: #f8f8f8;
       overflow-x: auto;
-      padding-left: 16px;
+      padding: 24px;
+      font-size: 14px;
+    }
+
+    pre#code .dim span {
+      color: #ccc !important;
     }
 
     h2 {
@@ -194,6 +216,7 @@ Example:
       margin: 0;
       background-color: #f8f8f8;
       padding: 16px 16px 0 16px;
+      font-size: 20px;
     }
 
     .sidebar {
@@ -201,16 +224,50 @@ Example:
       background-color: #595a70;
       overflow-x: auto;
       color: white;
+      padding: 12px 0;
+      font-size: 14px;
+      color: white;
     }
 
     polyfill-next-selector { content: '.sidebar > *'; }
     ::content > * {
+      padding: 12px 24px 12px 24px;
+    }
+
+    polyfill-next-selector { content: '.sidebar > code-explainer-info'; }
+    ::content > code-explainer-info {
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    polyfill-next-selector { content: '.sidebar > h2+div'; }
+    ::content > h2+div {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    polyfill-next-selector { content: '.sidebar:last-child'; }
+    ::content:last-child {
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    polyfill-next-selector { content: '.sidebar > h2'; }
+    ::content > h2 {
+      color: rgb(31, 32, 54);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 24px;
+      margin: 0;
       color: white;
-      padding: 12px 16px 8px 16px;
     }
 
     .wide .sidebar {
-      width: 400px;
+      width: 384px;
+    }
+
+    .clip {
+      padding-right: 24px;
+      overflow: hidden;
+      background-color: #f8f8f8;
     }
 
   </style>
@@ -221,7 +278,7 @@ Example:
   <div layout horizontal?="{{wide}}" vertical?="{{!wide}}" class="{{ {wide:wide} | tokenList }}">
     <div flex layout vertical>
       <h2 hidden?="{{!label}}">{{label}}</h2>
-      <pre id="code" flex on-select="{{select}}"></pre>
+      <div class="clip" layout vertical flex><pre id="code" flex on-select="{{select}}"></pre></div>
     </div>
     <core-selector selected="{{selected}}" valueattr="sec" class="sidebar" layout vertical>
       <content></content>
@@ -258,6 +315,8 @@ Example:
       var indents = code.match("\n([ \t]+)");
       var indent = indents && indents[0];
       code = code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      code = code.replace(/\[dim-start\]/g, "<span class=\"dim\">");
+      code = code.replace(/\[dim-end\]/g, "</span>");
       code = code.replace(/\[start-(\w+)\]/g, "<code-explainer-section sec=\"$1\">");
       code = code.replace(/\[end-(\w+)\]/g, "</code-explainer-section>");
       if (indent) {
