@@ -2,7 +2,7 @@
 <link rel="import" href="../core-selector/core-selector.html">
 <link rel="import" href="../core-media-query/core-media-query.html">
 <link rel="import" href="../core-collapse/core-collapse.html">
-<link rel="import" href="../highlightjs-element/highlightjs-element.html">
+<link rel="import" href="../prettify-element/prettify-element.html">
 
 <!-- Private element used by `code-explainer`. -->
 <polymer-element name="code-explainer-section" attributes="sec highlight">
@@ -207,17 +207,38 @@ Example:
 <template>
   <style>
 
-    .xml .javascript {
-      opacity: 1 !important;
+    pre,.prettyprint {
+        color: #9f499b;
+        margin: 0;
+        background-color: #f8f8f8;
+        overflow-x: auto;
+        padding: 24px;
+        font-size: 14px;
+        font-family: "Source Code Pro",Monaco,Menlo,Consolas,"Courier New",monospace;
     }
-
-    pre#code {
-      margin: 0;
-      background-color: #f8f8f8;
-      overflow-x: auto;
-      padding: 24px;
-      font-size: 14px;
-      font-family: "Source Code Pro",Monaco,Menlo,Consolas,"Courier New",monospace;
+    pre .typ,pre .inline,.prettyprint .typ,.prettyprint .inline {
+        color: #6b499f
+    }
+    pre .pun,.prettyprint .pun {
+        color: #5c6bc0
+    }
+    pre .str,pre .string,.prettyprint .str,.prettyprint .string {
+        color: #ff4081
+    }
+    pre .pln,.prettyprint .pln {
+        color: #7986cb
+    }
+    pre .kwd,.prettyprint .kwd {
+        color: #d61a7f
+    }
+    pre .atn,pre .attribute-name,.prettyprint .atn,.prettyprint .attribute-name {
+        color: #6b499f
+    }
+    pre .atv,pre .attribute-value,.prettyprint .atv,.prettyprint .attribute-value {
+        color: #7986cb
+    }
+    pre .com,pre .comment,.prettyprint .com,.prettyprint .comment {
+        color: #8a8a8a
     }
 
     pre#code .dim span {
@@ -339,8 +360,8 @@ Example:
       if (indent) {
         code = code.replace(new RegExp(indent, 'g'), '\n');
       }
-      this.$.code.innerHTML = code;
-      hljs.highlightBlock(this.$.code);
+      this.$.code.classList.add('prettyprint');
+      this.$.code.innerHTML = prettyPrintOne(code);
     },
 
     selectedChanged: function() {
