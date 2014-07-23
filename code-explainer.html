@@ -121,11 +121,17 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
      */
     label: "",
 
-    active: false,
-
-    open: false,
-
+    /**
+     * When true, the code-explainer-info collapses to just the label when
+     * not hovered.
+     * @attribute collapsable
+     * @type Boolean
+     */
     collapsable: false,
+
+    // Private
+    active: false,
+    open: false,
 
     eventDelegates: {
       mouseenter: 'over',

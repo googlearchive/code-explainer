@@ -100,6 +100,60 @@ license that can be found in the LICENSE file.
   <br>
 
   <code-explainer>
+    <script type="text/template"><!-- Define element -->
+      [start-def]<polymer-element name="my-counter" [start-publish]attributes="counter">[end-publish][end-def]
+        [start-scope]<template>[end-scope]
+          <style> /*...*/ </style>
+          <div id="label"><content></content></div>
+          Value: <span [start-nodefind]id="counterVal"[end-nodefind]>[start-data]&#123;&#123;counter&#125;&#125;[end-data]</span><br>
+          <button [start-events]on-tap="&#123;&#123;increment&#125;&#125;[end-events]">Increment</button>
+        [start-scope]</template>[end-scope]
+        <script>
+          Polymer({
+            [start-publish][start-data]counter[end-data]: 0[end-publish], // Default value
+            [start-publish]counterChanged[end-publish]: function() {
+              [start-nodefind]this.$.counterVal[end-nodefind].classList.add('highlight');
+            },
+            [start-events]increment[end-events]: function() {
+              this.counter++;
+            }
+          });
+        &lt;/script>
+      [start-def]</polymer-element>[end-def]
+
+      <!-- Use element -->
+      <my-counter [start-publish]counter="10"[end-publish]>[start-content]Points[end-content]</my-counter>
+    </script>
+    <h2>Creating Polymer Elements</h2>
+    <div>Polymer sugars Web Components standards with awesome features for creating custom elements:</div>
+    <code-explainer-info sec="def" label="Declarative custom element definition" collapsable bullet="1">
+      Define custom elements declaratively using <code>&lt;polymer-element&gt;</code>
+    </code-explainer-info>
+    <code-explainer-info sec="scope" label="Markup and style encapsulation" collapsable bullet="2">
+      Shadow DOM encapsulates your element's internals.  Template markup is 
+      compartmentalized, and styles don't leak in or out.
+    </code-explainer-info>
+    <code-explainer-info sec="publish" label="Published properties" collapsable bullet="3">
+      Properties that are <em>published</em> can be initialized via markup and invoke change 
+      handlers when modified.
+    </code-explainer-info>
+    <code-explainer-info sec="data" label="Declarative data binding" collapsable bullet="4">
+      Properties on the element can be bound directly into the view, with robust support for
+      expressions.
+    </code-explainer-info>
+    <code-explainer-info sec="events" label="Declarative event binding" collapsable bullet="5">
+      Event handlers can be bound to functions on the element declaratively using 
+      <code>on-<i>event</i></code> attributes.
+    </code-explainer-info>
+    <code-explainer-info sec="nodefind" label="Automatic node finding" collapsable bullet="6">
+      Any template children can be referenced by <code>id</code> on <code>this.$</code>, eliminating
+      boilerplate querySelector's.
+    </code-explainer-info>
+  </code-explainer>
+
+  <br>
+
+  <code-explainer>
     <script type="text/template">
       <template>
         <div class="foo">[start-mustache]{{userName}}[end-mustache]</div>
