@@ -3,9 +3,9 @@
   "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#master",
-	"core-selector": "Polymer/core-selector",
-	"core-media-query": "Polymer/core-media-query",
-	"highlightjs-element": "Polymer/highlightjs-element"
+    "core-selector": "Polymer/core-selector#master",
+    "core-media-query": "Polymer/core-media-query#master",
+    "prettify-element": "Polymer/prettify-element#master"
   }
 }
 
