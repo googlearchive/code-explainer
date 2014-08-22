@@ -32,7 +32,6 @@
     
     eventDelegates: {
       mouseenter: 'over',
-      mouseleave: 'out',
       tap: 'tap'
     },
     
@@ -40,10 +39,6 @@
       this.fire('select', {code: true, sec: this.sec});
     },
     
-    out: function() {
-      this.fire('select');
-    },
-
     tap: function() {
       this.fire('select', {code: true, sec: this.sec, tapped: true})
     }
@@ -64,6 +59,10 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
 <polymer-element name="code-explainer-info" attributes="label bullet active sec collapsable">
 <template>
   <style>
+
+    :host {
+      display: block;
+    }
 
     :host([active]) {
       background-color: #657cfe;
@@ -320,11 +319,11 @@ Example:
   <link href="../highlightjs/styles/default.css" rel="stylesheet" />
   <link href="../highlightjs/styles/github.css" rel="stylesheet" />
   <div layout horizontal?="{{wide}}" vertical?="{{!wide}}" class="{{ {wide:wide} | tokenList }}">
-    <div flex layout vertical>
+    <div flex auto?="{{!wide}}" layout vertical>
       <h2 hidden?="{{!label}}">{{label}}</h2>
-      <div class="clip" layout vertical flex><pre id="code" flex on-select="{{select}}"></pre></div>
+      <div class="clip" layout vertical flex auto><pre id="code" flex auto on-select="{{select}}"></pre></div>
     </div>
-    <core-selector selected="{{selected}}" valueattr="sec" class="sidebar" layout vertical>
+    <core-selector selected="{{selected}}" valueattr="sec" class="sidebar" layout vertical flex none>
       <content></content>
     </core-selector>
   </div>
