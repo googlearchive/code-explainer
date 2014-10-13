@@ -1,4 +1,4 @@
 code-explainer
 =========
 
-See the [component page](http://polymer.github.io/code-explainer) for more information.
+See the [component page](https://www.polymer-project.org/components/code-explainer/index.html) for more information.
