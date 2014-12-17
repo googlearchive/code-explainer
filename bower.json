@@ -2,10 +2,10 @@
   "name": "code-explainer",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#master",
-    "core-selector": "Polymer/core-selector#master",
-    "core-media-query": "Polymer/core-media-query#master",
-    "prettify-element": "Polymer/prettify-element#master"
-  }
+    "polymer": "Polymer/polymer#^0.5.0",
+    "core-selector": "Polymer/core-selector#^0.5.0",
+    "core-media-query": "Polymer/core-media-query#^0.5.0",
+    "prettify-element": "Polymer/prettify-element#^0.5.0"
+  },
+  "version": "0.5.2"
 }
-
