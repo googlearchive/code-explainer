@@ -8,13 +8,14 @@
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../core-selector/core-selector.html">
-<link rel="import" href="../core-media-query/core-media-query.html">
-<link rel="import" href="../core-collapse/core-collapse.html">
-<link rel="import" href="../prettify-element/prettify-element.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="..prettify-element/prettify-element.html">
 
 <!-- Private element used by `code-explainer`. -->
-<polymer-element name="code-explainer-section" attributes="sec highlight">
+<dom-module id="code-explainer-section">
 
 <!--
     FIXME(kschaaf): Note, adding line breaks before/after any of the tags
@@ -31,15 +32,30 @@
     background-color: rgba(100,123,253,0.3);
   }
 
-</style><span class="content {{ {highlight:highlight} | tokenList }}"><content></content></span></template>
+</style><span class$="{{computedClasses}}"><content></content></span></template>
 
 <script>
 
   Polymer({
+    is:"code-explainer-section",
 
-    sec: 0,
+    properties: {
+      sec: {
+        type: String,
+        value: '',
+      },
+      highlight: {
+        type: Boolean,
+        value: false,
+        notify: true
+      },
+      computedClasses: {
+        type: String,
+        computed: "_calculateContentClass(highlight)",
+      }
+    },
 
-    eventDelegates: {
+    listeners: {
       mouseenter: 'over',
       tap: 'tap'
     },
@@ -50,11 +66,18 @@
 
     tap: function() {
       this.fire('select', {code: true, sec: this.sec, tapped: true})
+    },
+
+    _calculateContentClass: function(highlight) {
+      if (highlight) {
+        return "content highlight";
+      }
+      return "content";
     }
   });
 
 </script>
-</polymer-element>
+</dom-module>
 
 <!--
 The `code-explainer-info` should be included as children of a `code-explainer`
@@ -65,15 +88,14 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
 @status beta
 @homepage github.io
 -->
-<polymer-element name="code-explainer-info" attributes="label bullet active sec collapsable">
-<template>
+<dom-module id="code-explainer-info">
   <style>
 
     :host {
       display: block;
     }
 
-    :host([active]) {
+    :host.iron-selected {
       background-color: #657cfe;
     }
 
@@ -96,83 +118,102 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
       line-height: 20px;
     }
 
-    polyfill-next-selector { content: ':host code'; }
-    ::content code {
+    ::content :host code {
       color: white;
     }
+
+    #title {
+      @apply(--layout-horizontal);
+    }
   </style>
-  <div layout horizontal>
-    <div hidden?="{{!bullet}}" class="bullet">{{bullet}}</div>
+  <template>
+  <div id="title">
+    <div hidden$="{{!bullet}}" class="bullet">{{bullet}}</div>
     <div class="label">{{label}}.</div>
   </div>
-  <core-collapse class="content" opened="{{open}}"><content></content></core-collapse>
+  <iron-collapse class="content" opened="{{open}}"><content></content></iron-collapse>
 </template>
+  <script>
+    Polymer({
+      is: 'code-explainer-info',
+      properties: {
+        active: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: 'activeChanged'
+        },
+        bullet: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        /**
+         * When true, the code-explainer-info collapses to just the label when
+         * not hovered.
+         * @attribute collapsable
+         * @type Boolean
+         */
+        collapsable: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
 
-<script>
-
-  Polymer({
-
-    /**
-     * Section name that maps to one or more `[start-xyz]`/`[end-xyz]` tags
-     * in the code snippit (where `xyz` maps to this `sec` property).  Must
-     * be a letter, number, or underscore.
-     * @attribute sec
-     * @type String
-     */
-    sec: null,
-
-    /**
-     * Freeform text describing this section in the explainer.  Gets special
-     * styling treatment.
-     * @attribute label
-     * @type String
-     */
-    label: "",
-
-    /**
-     * When true, the code-explainer-info collapses to just the label when
-     * not hovered.
-     * @attribute collapsable
-     * @type Boolean
-     */
-    collapsable: false,
-
-    // Private
-    active: false,
-    open: false,
-
-    eventDelegates: {
-      mouseenter: 'over',
-      mouseleave: 'out',
-      tap: 'tap'
-    },
-
-    attached: function() {
-      this.open = !this.collapsable;
-    },
-
-    activeChanged: function() {
-      if (this.collapsable) {
-        this.open = this.active;
+        /**
+         * Freeform text describing this section in the explainer.  Gets special
+         * styling treatment.
+         * @attribute label
+         * @type String
+         */
+        label: {
+          type: String,
+          value: ''
+        },
+        open: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * Section name that maps to one or more `[start-xyz]`/`[end-xyz]` tags
+         * in the code snippit (where `xyz` maps to this `sec` property).  Must
+         * be a letter, number, or underscore.
+         * @attribute sec
+         * @type String
+         */
+        sec: {
+          type: String,
+          value: ''
+        }
+      },
+      listeners: {
+        mouseenter: 'over',
+        mouseleave: 'out',
+        tap: 'tap'
+      },
+      attached: function () {
+        this.open = !this.collapsable;
+      },
+      activeChanged: function () {
+        if (this.collapsable) {
+          this.open = this.active;
+        }
+      },
+      over: function () {
+        this.fire('select', { sec: this.sec });
+      },
+      out: function () {
+        this.fire('select');
+      },
+      tap: function () {
+        this.fire('select', {
+          sec: this.sec,
+          tapped: true
+        });
       }
-    },
-
-    over: function() {
-      this.fire('select', {sec: this.sec});
-    },
-
-    out: function() {
-      this.fire('select');
-    },
-
-    tap: function() {
-      this.fire('select', {sec: this.sec, tapped: true})
-    }
-
-  });
-
-</script>
-</polymer-element>
+    });
+  </script>
+</dom-module>
 
 <!--
 The `code-explainer` element is a high-level element for displaying a snippit of
@@ -217,8 +258,8 @@ Example:
 @homepage github.io
 -->
 
-<polymer-element name="code-explainer" attributes="label">
-<template>
+<dom-module id="code-explainer">
+  <template>
   <style>
 
     pre,.prettyprint {
@@ -230,32 +271,32 @@ Example:
         font-size: 14px;
         font-family: "Source Code Pro",Monaco,Menlo,Consolas,"Courier New",monospace;
     }
-    pre .typ,pre .inline,.prettyprint .typ,.prettyprint .inline {
+    pre ::content .typ,pre ::content .inline,.prettyprint ::content .typ,.prettyprint ::content .inline {
         color: #6b499f
     }
-    pre .pun,.prettyprint .pun {
+    pre ::content .pun,.prettyprint ::content .pun {
         color: #5c6bc0
     }
-    pre .str,pre .string,.prettyprint .str,.prettyprint .string {
+    pre ::content .str,pre ::content .string,.prettyprint ::content .str,.prettyprint ::content .string {
         color: #ff4081
     }
-    pre .pln,.prettyprint .pln {
+    pre ::content .pln,.prettyprint ::content .pln {
         color: #7986cb
     }
-    pre .kwd,.prettyprint .kwd {
+    pre ::content .kwd,.prettyprint ::content .kwd {
         color: #d61a7f
     }
-    pre .atn,pre .attribute-name,.prettyprint .atn,.prettyprint .attribute-name {
+    pre ::content .atn,pre ::content .attribute-name,.prettyprint ::content .atn,.prettyprint ::content .attribute-name {
         color: #6b499f
     }
-    pre .atv,pre .attribute-value,.prettyprint .atv,.prettyprint .attribute-value {
+    pre ::content .atv,pre ::content .attribute-value,.prettyprint ::content .atv,.prettyprint ::content .attribute-value {
         color: #7986cb
     }
-    pre .com,pre .comment,.prettyprint .com,.prettyprint .comment {
+    pre ::content .com,pre ::content .comment,.prettyprint ::content .com,.prettyprint ::content .comment {
         color: #8a8a8a
     }
 
-    pre#code .dim span {
+    pre#code ::content .dim span {
       color: #ccc !important;
     }
 
@@ -271,38 +312,39 @@ Example:
     }
 
     .sidebar {
-      width: 100%;
+      width: 384px;
       background-color: #595a70;
       overflow-x: auto;
       color: white;
       padding: 12px 0;
       font-size: 14px;
       color: white;
+      @apply(--layout-vertical);
+      @apply(--layout-flex-none);
     }
 
-    polyfill-next-selector { content: '.sidebar > *'; }
-    ::content > * {
+    .sidebar:not([wide-layout]) {
+      width:100%;
+    }
+
+    ::content .sidebar > * {
       padding: 12px 24px 12px 24px;
     }
 
-    polyfill-next-selector { content: '.sidebar > code-explainer-info'; }
-    ::content > code-explainer-info {
+    ::content .sidebar > code-explainer-info {
       border-top: 1px solid rgba(255,255,255,0.2);
     }
 
-    polyfill-next-selector { content: '.sidebar > h2+div'; }
-    ::content > h2+div {
+    ::content .sidebar > h2+div {
       border-top: none;
       padding-top: 0;
     }
 
-    polyfill-next-selector { content: '.sidebar:last-child'; }
-    ::content:last-child {
+    ::content .sidebar:last-child {
       border-top: 1px solid rgba(255,255,255,0.2);
     }
 
-    polyfill-next-selector { content: '.sidebar > h2'; }
-    ::content > h2 {
+    ::content .sidebar > h2 {
       color: rgb(31, 32, 54);
       background-color: #595a70;
       font-weight: 300;
@@ -312,101 +354,131 @@ Example:
       color: white;
     }
 
-    .wide .sidebar {
-      width: 384px;
-    }
-
     .clip {
       padding-right: 24px;
       overflow: hidden;
       background-color: #f8f8f8;
+      @apply(--layout-vertical);
+      @apply(--layout-flex-auto);
+    }
+
+    #explainer:not([wide-layout]) {
+      @apply(--layout-vertical);
+    }
+
+    #explainer[wide-layout] {
+      @apply(--layout-horizontal);
+    }
+
+    #clip-wrapper:not([wide-layout]) {
+      @apply(--layout-vertical);
+      @apply(--layout-flex-auto);
+    }
+
+    #clip-wrapper[wide-layout] {
+      @apply(--layout-vertical);
+      @apply(--layout-flex);
+    }
+
+    #code {
+      @apply(--layout-flex-auto);
     }
 
   </style>
 
-  <core-media-query query="min-width: 940px" queryMatches="{{wide}}"></core-media-query>
-  <link href="../highlightjs/styles/default.css" rel="stylesheet" />
-  <link href="../highlightjs/styles/github.css" rel="stylesheet" />
-  <div layout horizontal?="{{wide}}" vertical?="{{!wide}}" class="{{ {wide:wide} | tokenList }}">
-    <div flex auto?="{{!wide}}" layout vertical>
-      <h2 hidden?="{{!label}}">{{label}}</h2>
-      <div class="clip" layout vertical flex auto><pre id="code" flex auto on-select="{{select}}"></pre></div>
+  <iron-media-query query="(min-width: 940px)" query-matches="{{wide}}"></iron-media-query>
+  <div id="explainer" wide-layout$="{{wide}}">
+    <div id="clip-wrapper" wide-layout$="{{wide}}">
+      <h2 hidden$="{{!label}}">{{label}}</h2>
+      <div class="clip"><pre id="code" on-select="select"></pre></div>
     </div>
-    <core-selector selected="{{selected}}" valueattr="sec" class="sidebar" layout vertical flex none>
+    <iron-selector id="selector" selected$="{{selected}}" attr-for-selected="sec" class="sidebar" wide-layout$="{{wide}}">
       <content></content>
-    </core-selector>
+    </iron-selector>
   </div>
 
 </template>
+  <script>
+    Polymer({
+      is: 'code-explainer',
+      properties: {
+        /**
+         * Heading label text that descripes this code explainer.  Gets heading
+         * styling treatment.
+         * @attribute label
+         * @type String
+         */
+        label: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        selected: {
+          type: String,
+          value: '',
+          notify: true,
+          observer: 'selectedChanged'
+        }
+      },
+      listeners: {
+        select: 'select'
+      },
 
-<script>
+      attached: function () {
+        var tmpl = Polymer.dom(this).querySelector('template') || Polymer.dom(this).querySelector('script[type="text/template"]');
+        var code = tmpl && Polymer.dom(tmpl).innerHTML;
+        if (!code) {
+          console.warn('No code found in template: ', this);
+          return;
+        }
+        var indents = code.match('\n([ \t]+)');
+        var indent = indents && indents[0];
+        code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        code = code.replace(/\[dim-start\]/g, '<span class="dim">');
+        code = code.replace(/\[dim-end\]/g, '</span>');
+        code = code.replace(/\[start-(\w+)\]/g, '<code-explainer-section sec="$1">');
+        code = code.replace(/\[end-(\w+)\]/g, '</code-explainer-section>');
+        if (indent) {
+          code = code.replace(new RegExp(indent, 'g'), '\n');
+        }
+        Polymer.dom(this.$.code).classList.add('prettyprint');
+        this.set('$.code.innerHTML', prettyPrintOne(code));
+      },
+      selectedChanged: function () {
+        var secs = Polymer.dom(this.shadyRoot).querySelectorAll('code-explainer-section');
+        secs.forEach(function(section){
+          var selected = (section.sec == this.selected);
+          section.highlight = selected;
+        }.bind(this));
 
-  Polymer({
-
-    /**
-     * Heading label text that descripes this code explainer.  Gets heading
-     * styling treatment.
-     * @attribute label
-     * @type String
-     */
-    label: null,
-
-    eventDelegates: {
-      select: 'select'
-    },
-
-    selected: null,
-
-    attached: function() {
-      var tmpl = this.querySelector('template') || this.querySelector('script[type="text/template"]');
-      var code = tmpl && tmpl.innerHTML;
-      if (!code) {
-        console.warn('No code found in template: ', this);
-        return;
-      }
-      var indents = code.match("\n([ \t]+)");
-      var indent = indents && indents[0];
-      code = code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      code = code.replace(/\[dim-start\]/g, "<span class=\"dim\">");
-      code = code.replace(/\[dim-end\]/g, "</span>");
-      code = code.replace(/\[start-(\w+)\]/g, "<code-explainer-section sec=\"$1\">");
-      code = code.replace(/\[end-(\w+)\]/g, "</code-explainer-section>");
-      if (indent) {
-        code = code.replace(new RegExp(indent, 'g'), '\n');
-      }
-      this.$.code.classList.add('prettyprint');
-      this.$.code.innerHTML = prettyPrintOne(code);
-    },
-
-    selectedChanged: function() {
-      var secs = this.shadowRoot.querySelectorAll('code-explainer-section');
-      for (var i=0; i<secs.length; i++) {
-        var sec = secs[i];
-        var sel = (sec.sec == this.selected);
-        sec.highlight = sel;
-      }
-    },
-
-    select: function(e) {
-      if (this.hoverDelay) {
-        return;
-      }
-      this.selected = e.detail.sec;
-      if (e.detail.tapped) {
-        var type = (e.detail.code) ? 'code-explainer-info' : 'code-explainer-section';
-        var root = (e.detail.code) ? this : this.shadowRoot;
-        var sec = root.querySelector(type + '[sec="' + this.selected + '"]');
-        if (sec) {
-          this.hoverDelay = true;
-          sec.scrollIntoViewIfNeeded(true);
-          setTimeout(function() {
-            this.hoverDelay = false;
-          }.bind(this), 100);
+        var infos = Polymer.dom(this).querySelectorAll('code-explainer-info');
+        infos.forEach(function(info){
+          var selected = (info.sec == this.selected);
+          if (selected) {
+            info.setAttribute("active", "true");
+          } else {
+            info.removeAttribute("active");
+          }
+        }.bind(this));
+      },
+      select: function (e) {
+        if (this.hoverDelay) {
+          return;
+        }
+        this.selected = e.detail.sec;
+        if (e.detail.tapped) {
+          var type = e.detail.code ? 'code-explainer-info' : 'code-explainer-section';
+          var root = e.detail.code ? this : this.shadyRoot;
+          var sec = Polymer.dom(root).querySelector(type + '[sec="' + this.selected + '"]');
+          if (sec) {
+            this.hoverDelay = true;
+            sec.scrollIntoViewIfNeeded(true);
+            setTimeout(function () {
+              this.hoverDelay = false;
+            }.bind(this), 100);
+          }
         }
       }
-    }
-
-  });
-
-</script>
-</polymer-element>
+    });
+  </script>
+</dom-module>
