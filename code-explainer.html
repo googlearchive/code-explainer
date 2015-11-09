@@ -34,20 +34,20 @@
 </style><span class="content {{ {highlight:highlight} | tokenList }}"><content></content></span></template>
 
 <script>
-  
+
   Polymer({
 
     sec: 0,
-    
+
     eventDelegates: {
       mouseenter: 'over',
       tap: 'tap'
     },
-    
+
     over: function() {
       this.fire('select', {code: true, sec: this.sec});
     },
-    
+
     tap: function() {
       this.fire('select', {code: true, sec: this.sec, tapped: true})
     }
@@ -58,9 +58,9 @@
 
 <!--
 The `code-explainer-info` should be included as children of a `code-explainer`
-element to provide annotations to tagged sections of the code.  
+element to provide annotations to tagged sections of the code.
 See <a href="#code-explainer">`code-explainer`</a> for more information.
- 
+
 @element code-explainer-info
 @status beta
 @homepage github.io
@@ -83,8 +83,8 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
       width: 24px;
       height: 24px;
       text-align: center;
-      border-radius: 12px; 
-      margin-right: 8px;     
+      border-radius: 12px;
+      margin-right: 8px;
     }
     .label {
       font-weight: bold;
@@ -175,16 +175,16 @@ See <a href="#code-explainer">`code-explainer`</a> for more information.
 </polymer-element>
 
 <!--
-The `code-explainer` element is a high-level element for displaying a snippit of 
-syntax-highlighted code alongside a sidebar of supplied `code-explainer-info` 
+The `code-explainer` element is a high-level element for displaying a snippit of
+syntax-highlighted code alongside a sidebar of supplied `code-explainer-info`
 elements that describe sections of the code.
 
 Code is supplied via a child `<template>` or `<script type="template">` tag containing
 the code to be syntax  highlighted (HTML markup need not be escaped).  Explanatory
-text should be supplied using child `<code-explainer-info>` elements.  Sections of 
-the code can be tagged using special `[start-xyz]...[end-xyz]` tags, where `xyz` is a 
-string mapping code sections to a supplied `code-explainer-info` element whose `sec` 
-attribute matches.  Both the tagged code sections and explainer text are hoverable to 
+text should be supplied using child `<code-explainer-info>` elements.  Sections of
+the code can be tagged using special `[start-xyz]...[end-xyz]` tags, where `xyz` is a
+string mapping code sections to a supplied `code-explainer-info` element whose `sec`
+attribute matches.  Both the tagged code sections and explainer text are hoverable to
 highlight and draw attention to the section of code being explained.  More than one
 code sections tagged with `[start-xyz]...[enx-xyz]` can be supplied for a given
 section.
@@ -207,11 +207,11 @@ Example:
         available for binding.
       </code-explainer-info>
       <code-explainer-info sec="mustache" label="Insert a binding">
-        Bindings can be inserted into the view using <code>{{...}}</code> 
+        Bindings can be inserted into the view using <code>{{...}}</code>
         mustache-style syntax.
       </code-explainer-info>
     </code-explainer>
- 
+
 @element code-explainer
 @status beta
 @homepage github.io
