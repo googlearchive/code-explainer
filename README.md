@@ -17,6 +17,6 @@ mkdir bower_components/code-explainer
 ln code-explainer.html bower_components/code-explainer/code-explainer.html
 
 node_modules/.bin/http-server -p 8080 -a 127.0.0.1
-# Navigate to localhost:8080/code-explainer-demo.html
+# Navigate to localhost:8080/demo.html
 
 ```
