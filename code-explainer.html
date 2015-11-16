@@ -433,7 +433,7 @@ Example:
           console.warn('No code found in template: ', this);
           return;
         }
-        var indents = code.match('\n([ \t]+)');
+        var indents = code.match('\n([ \t]*)');
         var indent = indents && indents[0];
         code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         code = code.replace(/\[dim-start\]/g, '<span class="dim">');
