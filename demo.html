@@ -7,20 +7,120 @@ license that can be found in the LICENSE file.
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <script src="../platform/platform.js"></script>
-  <link rel="import" href="code-explainer.html">
+  <link rel="import" href="bower_components/code-explainer/code-explainer.html">
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300italic,600,800|Source+Code+Pro:400,700" rel="stylesheet">
   <style>
   	body {
       font-size: 16px;
       font-family: "RobotoDraft Regular,Open Sans",Helvetica,Arial,sans-serif;
       font-weight: normal;
-      line-height: 24px;  		
+      line-height: 24px;
   	}
   </style>
 </head>
 
 <body unresolved touch-action="auto">
+
+  <div style="max-width:1200px; margin: 0 auto;">
+
+  <h1>A simple example</h1>
+
+  <code-explainer>
+    <script type="text/template">
+      <template>
+        <div class="foo">[start-mustache]{{userName}}[end-mustache]</div>
+      </template>
+      &lt;script>
+        Polymer({
+          properties: {
+            [start-prop]userName[end-prop]: {
+              type: String,
+              value: '',
+              notify: true,
+            }
+          }
+        });
+      &lt;/script>
+    </script>
+    <h2>How bindings work</h2>
+    <div>You can bind variables to your view (and vice versa) by doing the following:</div>
+    <code-explainer-info label="Prerequisites" collapsable>
+      Make sure you have included the proper Polymer 1.0 files.  See the <a href="#">previous example</a> if you have not.
+    </code-explainer-info>
+    <code-explainer-info sec="prop" bullet="1" label="Define a variable">
+      You can declare properties on your custom element by adding them to the <code>properties</code> object on your prototype.
+    </code-explainer-info>
+    <code-explainer-info sec="mustache" bullet="2" label="Insert a binding">
+      Bindings can be inserted into the view using <code>{{...}}</code> mustache-style syntax.
+    </code-explainer-info>
+  </code-explainer>
+
+  <h1>How to setup a code-explainer</h1>
+
+  <code-explainer>
+    <script type="text/template">
+<code-explainer>
+    [start-script]&lt;script type="text/template">[end-script]
+      <template>
+        <div class="foo">[start-boxes]&#91;start-mustache]{{userName}}&#91;end-mustache][end-boxes]</div>
+      </template>
+      [start-script]&amplt;script>[end-script]
+        Polymer({
+          properties: {
+            [start-boxes]&#91;start-prop]userName&#91;end-prop][end-boxes]: {
+              type: String,
+              value: '',
+              notify: true,
+            }
+          }
+        });
+      [start-script]&amplt;/script>[end-script]
+    [start-script]&lt;/script>[end-script]
+    [start-title]<h2>How bindings work</h2>
+    <div>You can bind variables to your view (and vice versa) by doing the following:</div>[end-title]
+    <[start-blurbs]code-explainer-info[end-blurbs] label="Prerequisites" [start-collapse]collapsable[end-collapse]>
+      Make sure you have included the proper Polymer 1.0 files.  See the <a href="#">previous example</a> if you have not.
+    </code-explainer-info>
+    <[start-blurbs]code-explainer-info[end-blurbs] sec="prop" [start-bullets]bullet="1"[end-bullets] label="Define a variable">
+      You can declare properties on your custom element by adding them to the <code>properties</code> object on your prototype.
+    </code-explainer-info>
+    <[start-blurbs]code-explainer-info[end-blurbs] sec="mustache" [start-bullets]bullet="2"[end-bullets] label="Insert a binding">
+      Bindings can be inserted into the view using <code>{{...}}</code> mustache-style syntax.
+    </code-explainer-info>
+</code-explainer>
+[dim-start]<!-- If you want to de-emphasize boilerplate code,
+put it between &#91;dim-start] and &#91;dim-end] annotations -->[dim-end]
+    </script>
+    <h2>Using Code Explainer (now with Polymer 1.2+)</h2>
+    <div>Using Polymer elements (like all Web Components) is absurdly simple:</div>
+    <code-explainer-info sec="script" bullet="1" label="Insert the sample code">
+      Put your sample code into a script tage of type <code>"text/template"</code>.  If you have any <code>&lt;script></code> tags,
+      you should escape the <code>&lt;</code> with <code>&amplt;</code>
+    </code-explainer-info>
+    <code-explainer-info sec="boxes" bullet="2" label="Add your annotations">
+      Annotate the code where you like using <code>[start-XYZ]</code> and <code>[end-XYZ]</code>, using short labels.
+      You can have several non-contiguous annotations that will all be highlighted, if you want.
+    </code-explainer-info>
+    <code-explainer-info sec="title" bullet="3" label="Create a title and lead-in segment">
+      Arbitrary HTML can be placed after the <code>&lt;/script></code> tag and before the first <code>&lt;code-explainer-info></code> tag.
+      <code>&lt;h2></code> tags work great for titles, but you can style it however you like.
+    </code-explainer-info>
+    <code-explainer-info sec="blurbs" bullet="4" label="Write up informational blurbs">
+      Using the annotations you already made, create <code>&lt;code-explainer-info></code> tags that house the information.
+      They can contain arbitrary html, like <code>&lt;code></code> tags and links.
+      The label attribute will be the title of the blurb.
+    </code-explainer-info>
+    <code-explainer-info sec="bullets" bullet="5" label="[optional] Label the information blurbs" collapsable>
+      The information panels will be displayed in the order you write them and can be labeled with any string.
+      If your example needs to count 1, 2, 3a, 3b, 7 - go right ahead.
+      If you provide no label, no bullet will be rendered.
+    </code-explainer-info>
+    <code-explainer-info sec="collapse" bullet="6" label="[optional] Make information blurbs collapse/expand" collapsable>
+      Add the collapsable attribute to any or all of the information blurbs to give them some animation as the code or blurbs are moused over.
+    </code-explainer-info>
+  </code-explainer>
+
+  <h1>Other examples, demonstrating Polymer 0.5</h1>
 
   <code-explainer>
     <script type="text/template">[dim-start]<!-- Polyfill Web Components support for older browsers -->
@@ -76,11 +176,11 @@ license that can be found in the LICENSE file.
       Define custom elements declaratively using <code>&lt;polymer-element&gt;</code>
     </code-explainer-info>
     <code-explainer-info sec="scope" label="Markup and style encapsulation">
-      Shadow DOM encapsulates your element's internals.  Template markup is 
+      Shadow DOM encapsulates your element's internals.  Template markup is
       compartmentalized, and styles don't leak in or out.
     </code-explainer-info>
     <code-explainer-info sec="publish" label="Published properties">
-      Properties that are <em>published</em> can be initialized via markup and invoke change 
+      Properties that are <em>published</em> can be initialized via markup and invoke change
       handlers when modified.
     </code-explainer-info>
     <code-explainer-info sec="data" label="Declarative data binding">
@@ -88,7 +188,7 @@ license that can be found in the LICENSE file.
       expressions.
     </code-explainer-info>
     <code-explainer-info sec="events" label="Declarative event binding">
-      Event handlers can be bound to functions on the element declaratively using 
+      Event handlers can be bound to functions on the element declaratively using
       <code>on-<i>event</i></code> attributes.
     </code-explainer-info>
     <code-explainer-info sec="nodefind" label="Automatic node finding">
@@ -130,11 +230,11 @@ license that can be found in the LICENSE file.
       Define custom elements declaratively using <code>&lt;polymer-element&gt;</code>
     </code-explainer-info>
     <code-explainer-info sec="scope" label="Markup and style encapsulation" collapsable bullet="2">
-      Shadow DOM encapsulates your element's internals.  Template markup is 
+      Shadow DOM encapsulates your element's internals.  Template markup is
       compartmentalized, and styles don't leak in or out.
     </code-explainer-info>
     <code-explainer-info sec="publish" label="Published properties" collapsable bullet="3">
-      Properties that are <em>published</em> can be initialized via markup and invoke change 
+      Properties that are <em>published</em> can be initialized via markup and invoke change
       handlers when modified.
     </code-explainer-info>
     <code-explainer-info sec="data" label="Declarative data binding" collapsable bullet="4">
@@ -142,7 +242,7 @@ license that can be found in the LICENSE file.
       expressions.
     </code-explainer-info>
     <code-explainer-info sec="events" label="Declarative event binding" collapsable bullet="5">
-      Event handlers can be bound to functions on the element declaratively using 
+      Event handlers can be bound to functions on the element declaratively using
       <code>on-<i>event</i></code> attributes.
     </code-explainer-info>
     <code-explainer-info sec="nodefind" label="Automatic node finding" collapsable bullet="6">
@@ -151,30 +251,7 @@ license that can be found in the LICENSE file.
     </code-explainer-info>
   </code-explainer>
 
-  <br>
-
-  <code-explainer>
-    <script type="text/template">
-      <template>
-        <div class="foo">[start-mustache]{{userName}}[end-mustache]</div>
-      </template>
-      <script>
-        Polymer({
-          [start-var]userName: "John"[end-var]
-        });
-      &lt;/script>
-    </script>
-    <h2>How bindings work</h2>
-    <code-explainer-info sec="var" bullet="1" label="Define a variable">
-      Variables defined in the scope of a Polymer object are
-      available for binding.
-    </code-explainer-info>
-    <code-explainer-info sec="mustache" bullet="2" label="Insert a binding">
-      Bindings can be inserted into the view using <code>{{...}}</code> 
-      mustache-style syntax.
-    </code-explainer-info>
-  </code-explainer>
-
+  </div>
 
 </body>
 </html>

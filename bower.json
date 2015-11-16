@@ -1,11 +1,16 @@
 {
   "name": "code-explainer",
-  "private": true,
+  "version": "1.2.0",
+  "license": "http://polymer.github.io/LICENSE.txt",
   "dependencies": {
-    "polymer": "Polymer/polymer#master",
-    "core-selector": "Polymer/core-selector#master",
-    "core-media-query": "Polymer/core-media-query#master",
-    "prettify-element": "Polymer/prettify-element#master"
+    "polymer": "Polymer/polymer#~1.2.0",
+    "iron-selector": "PolymerElements/iron-selector#~1.0.0",
+    "iron-collapse": "PolymerElements/iron-collapse#~1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#~1.0.0",
+    "iron-media-query": "PolymerElements/iron-media-query#~1.0.0",
+    "prettify-element": "SmokyBob/prettify-element#1.0"
+  },
+  "resolutions": {
+    "polymer": "^1.2.0"
   }
 }
-
